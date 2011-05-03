@@ -19,6 +19,8 @@
 package com.octo.captcha.component.image.utils;
 
 import java.awt.*;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.Dialog.ModalityType;
 import java.awt.datatransfer.Clipboard;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.InvalidDnDOperationException;
@@ -671,6 +673,18 @@ public class MockToolkit extends Toolkit {
      */
     public Map mapInputMethodHighlight(InputMethodHighlight highlight) {
         return null;
+    }
+
+    protected DesktopPeer createDesktopPeer(Desktop dsktp) throws HeadlessException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean isModalityTypeSupported(ModalityType mt) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean isModalExclusionTypeSupported(ModalExclusionType met) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

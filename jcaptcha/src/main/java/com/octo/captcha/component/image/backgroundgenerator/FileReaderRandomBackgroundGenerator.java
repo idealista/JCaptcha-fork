@@ -3,7 +3,6 @@
  * Copyright (c)  2007 jcaptcha.net. All Rights Reserved.
  * See the LICENSE.txt file distributed with this package.
  */
-
 package com.octo.captcha.component.image.backgroundgenerator;
 
 import java.awt.Graphics2D;
@@ -21,9 +20,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import com.octo.captcha.CaptchaException;
-import com.sun.image.codec.jpeg.ImageFormatException;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageDecoder;
+import javax.imageio.ImageIO;
 
 /**
  * <p>File reader background generator that return a random image (JPEG ONLY) from the ones found in the directory </p>
@@ -33,18 +30,18 @@ import com.sun.image.codec.jpeg.JPEGImageDecoder;
  * @author <a href="mailto:mag@octo.com">Marc-Antoine Garrigue</a>
  * @version 1.0
  */
-public class FileReaderRandomBackgroundGenerator extends
-        AbstractBackgroundGenerator {
+public class FileReaderRandomBackgroundGenerator extends AbstractBackgroundGenerator {
 
     private List images = new ArrayList();
     private String rootPath = ".";
 
     public FileReaderRandomBackgroundGenerator(Integer width,
-                                               Integer height, String rootPath) {
+            Integer height, String rootPath) {
         super(width, height);
 
-        if (rootPath != null)
+        if (rootPath != null) {
             this.rootPath = rootPath;
+        }
 
         File dir = findDirectory(this.rootPath);
 
@@ -70,12 +67,11 @@ public class FileReaderRandomBackgroundGenerator extends
                     images.set(i, tile(bufferedImage));
                 }
             } else {
-                throw new CaptchaException("Root path directory is valid but " +
-                        "does not contains any image (jpg) files");
+                throw new CaptchaException("Root path directory is valid but "
+                        + "does not contains any image (jpg) files");
             }
         }
     }
-
     /**
      *
      */
@@ -137,8 +133,8 @@ public class FileReaderRandomBackgroundGenerator extends
 
 
         if (isNotReadable(dir)) {
-            throw new CaptchaException("All tried paths :'" + triedPath.toString() + "' is not" +
-                    " a directory or cannot be read");
+            throw new CaptchaException("All tried paths :'" + triedPath.toString() + "' is not"
+                    + " a directory or cannot be read");
         }
 
         // cache answer for later
@@ -147,19 +143,19 @@ public class FileReaderRandomBackgroundGenerator extends
         return dir;
     }
 
-	private String getFilePath(URL url) {
-		String file = null;
-		try {
-			file = URLDecoder.decode(url.getFile(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// Do Nothing			
-		}
-		return file;
-	}
+    private String getFilePath(URL url) {
+        String file = null;
+        try {
+            file = URLDecoder.decode(url.getFile(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // Do Nothing			
+        }
+        return file;
+    }
 
-	private boolean isNotReadable(File dir) {
-		return !dir.canRead() || !dir.isDirectory();
-	}
+    private boolean isNotReadable(File dir) {
+        return !dir.canRead() || !dir.isDirectory();
+    }
 
     private StringTokenizer getClasspathFromSystemProperty() {
 
@@ -167,7 +163,6 @@ public class FileReaderRandomBackgroundGenerator extends
         StringTokenizer token = new StringTokenizer(classpath, File.pathSeparator);
         return token;
     }
-
 
     private void appendFilePath(StringBuffer triedPath, File dir) {
         triedPath.append(dir.getAbsolutePath());
@@ -182,8 +177,8 @@ public class FileReaderRandomBackgroundGenerator extends
         int NumberY = (getImageHeight() / tileImage.getHeight());
         for (int k = 0; k <= NumberY; k++) {
             for (int l = 0; l <= NumberX; l++) {
-                g2.drawImage(tileImage, l * tileImage.getWidth(), k *
-                        tileImage.getHeight(),
+                g2.drawImage(tileImage, l * tileImage.getWidth(), k
+                        * tileImage.getHeight(),
                         Math.min(tileImage.getWidth(), getImageWidth()),
                         Math.min(tileImage.getHeight(), getImageHeight()),
                         null);
@@ -194,20 +189,15 @@ public class FileReaderRandomBackgroundGenerator extends
     }
 
     private static BufferedImage getImage(File o) {
-        
+
         try {
             FileInputStream fis = new FileInputStream(o);
-            JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(fis);
-            BufferedImage out = decoder.decodeAsBufferedImage();
+            BufferedImage out = ImageIO.read(fis);
             fis.close();
-
-            // Return the format name
-            return out;
             
+            return out;
         } catch (IOException e) {
             throw new CaptchaException("Unknown error during file reading ", e);
-        } catch (ImageFormatException e) {
-            return null;
         }
     }
 
@@ -220,5 +210,4 @@ public class FileReaderRandomBackgroundGenerator extends
     public BufferedImage getBackground() {
         return (BufferedImage) images.get(myRandom.nextInt(images.size()));
     }
-
 }

@@ -3,17 +3,13 @@
  * Copyright (c)  2007 jcaptcha.net. All Rights Reserved.
  * See the LICENSE.txt file distributed with this package.
  */
-
 package com.octo.captcha.image;
 
 import com.octo.captcha.Captcha;
-import com.sun.image.codec.jpeg.ImageFormatException;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageDecoder;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /**
  * <p>String question about a BufferedImage challenge. Abstract.</p>
@@ -24,9 +20,7 @@ import java.io.IOException;
 public abstract class ImageCaptcha implements Captcha {
 
     private Boolean hasChallengeBeenCalled = Boolean.FALSE;
-
     protected String question;
-
     protected transient BufferedImage challenge;
 
     protected ImageCaptcha(String question, BufferedImage challenge) {
@@ -57,7 +51,6 @@ public abstract class ImageCaptcha implements Captcha {
         hasChallengeBeenCalled = Boolean.TRUE;
         return challenge;
     }
-
 
     /**
      * Dispose the challenge, once this method is call the getChallenge method will return null.<br> It has been added
@@ -92,10 +85,8 @@ public abstract class ImageCaptcha implements Captcha {
 
         // If the challenge has not been disposed
         if (this.challenge != null) {
-            // use jpeg encoding
-            JPEGImageEncoder jpegEncoder =
-                    JPEGCodec.createJPEGEncoder(out);
-            jpegEncoder.encode(this.challenge);
+
+            ImageIO.write(this.challenge, "jpg", out);
         }
     }
 
@@ -106,15 +97,14 @@ public abstract class ImageCaptcha implements Captcha {
      * @throws ClassNotFoundException
      */
     private void readObject(java.io.ObjectInputStream in)
-            throws IOException, ClassNotFoundException {
+            throws Exception, ClassNotFoundException {
 
         // UnSerialize captcha fields with default method
         in.defaultReadObject();
-        
+
         try {
-            JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(in);
-            this.challenge = decoder.decodeAsBufferedImage();
-        } catch (ImageFormatException e) {
+            this.challenge = ImageIO.read(in);
+        } catch (Exception e) {
             if (!hasChallengeBeenCalled.booleanValue()) {
                 // If the getChallenge method has not been called the challenge should be available for unmarhslling.
                 // In this case, the thrown Exception is not related to the dispose status 
