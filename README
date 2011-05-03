@@ -1,0 +1,1 @@
+This fork of JCaptcha isn't even intended to work.  It's only intended to be a drop in replacement for apps that require JCaptcha 1.0 compatible API in the classpath but need something that will work on any JDK instead of the Sun JDK.
