@@ -20,14 +20,13 @@ package com.octo.captcha.engine.image.utils;
 
 import com.octo.captcha.image.ImageCaptcha;
 import com.octo.captcha.image.ImageCaptchaFactory;
-import com.sun.image.codec.jpeg.ImageFormatException;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 /**
  * <p>Description: </p>
@@ -37,8 +36,7 @@ import java.io.IOException;
  */
 public class SimpleImageCaptchaToJPEG {
 
-    public static void main(String[] args)
-            throws ImageFormatException, IOException {
+    public static void main(String[] args) throws IOException {
 
         com.octo.captcha.engine.image.gimpy.SimpleListImageCaptchaEngine bge =
                 new com.octo.captcha.engine.image.gimpy.SimpleListImageCaptchaEngine();
@@ -55,10 +53,7 @@ public class SimpleImageCaptchaToJPEG {
         BufferedImage bi = pixCaptcha.getImageChallenge();
 
         File f = new File("foo.jpg");
-
-        JPEGImageEncoder jpegEncoder = JPEGCodec.createJPEGEncoder(
-                new FileOutputStream(f));
-        jpegEncoder.encode(bi);
+        ImageIO.write(bi, "jpg", new FileOutputStream(f));
     }
 
 }
