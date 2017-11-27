@@ -11,9 +11,9 @@
         <groupId>com.octo.captcha</groupId>
         <version>1.0</version>
     </parent>
-    <artifactId>jcaptcha</artifactId>
+    <artifactId>jcaptcha-openjdk</artifactId>
     <version>1.0</version>
-    <name>JCaptcha</name>
+    <name>JCaptcha OpenJDK</name>
     <packaging>jar</packaging>
 
     <description><![CDATA[<b>JCAPTCHA</b>, for <b>J</b>ava <b>C</b>ompletely <b>A</b>utomated <b>P</b>ublic <b>T</b>est to tell <b>C</b>omputers and <b>H</b>umans <b>A</b>part
